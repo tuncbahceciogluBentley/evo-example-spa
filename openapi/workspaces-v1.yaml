@@ -1,0 +1,4027 @@
+components:
+  schemas:
+    AddInstanceUsersRequest:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/UserRoleMapping'
+          title: Users
+          type: array
+      required:
+      - users
+      title: AddInstanceUsersRequest
+      type: object
+    AddInstanceUsersResponse:
+      properties:
+        invitations:
+          items:
+            $ref: '#/components/schemas/BaseInstanceUserInvitationResponse'
+          title: Invitations
+          type: array
+        members:
+          items:
+            $ref: '#/components/schemas/BaseInstanceUserResponse'
+          title: Members
+          type: array
+      required:
+      - invitations
+      - members
+      title: AddInstanceUsersResponse
+      type: object
+    AssignRoleRequest:
+      anyOf:
+      - $ref: '#/components/schemas/UserRole'
+      - $ref: '#/components/schemas/UserRoleViaEmail'
+      title: AssignRoleRequest
+    BaseInstanceUserInvitationResponse:
+      properties:
+        created_date:
+          format: date-time
+          title: Created Date
+          type: string
+        email:
+          title: Email
+          type: string
+        expiration_date:
+          format: date-time
+          title: Expiration Date
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        invited_by_email:
+          title: Invited By Email
+          type: string
+        roles:
+          items:
+            $ref: '#/components/schemas/BaseInstanceUserRoleResponse'
+          title: Roles
+          type: array
+        status:
+          title: Status
+          type: string
+      required:
+      - id
+      - email
+      - invited_by_email
+      - status
+      - created_date
+      - expiration_date
+      - roles
+      title: BaseInstanceUserInvitationResponse
+      type: object
+    BaseInstanceUserResponse:
+      properties:
+        email:
+          title: Email
+          type: string
+        full_name:
+          title: Full Name
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        roles:
+          items:
+            $ref: '#/components/schemas/BaseInstanceUserRoleResponse'
+          title: Roles
+          type: array
+      required:
+      - id
+      - email
+      - full_name
+      - roles
+      title: BaseInstanceUserResponse
+      type: object
+    BaseInstanceUserRoleResponse:
+      properties:
+        description:
+          title: Description
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      - description
+      title: BaseInstanceUserRoleResponse
+      type: object
+    BoundingBox:
+      additionalProperties: false
+      properties:
+        coordinates:
+          items:
+            items:
+              description: Coordinate as [longitude, latitude]. First one MUST be
+                the longitude.
+              items:
+                anyOf:
+                - type: number
+                - type: integer
+              maxItems: 2
+              minItems: 2
+              type: array
+            type: array
+          title: Coordinates
+          type: array
+        type:
+          $ref: '#/components/schemas/GeometryTypeEnum'
+      required:
+      - type
+      - coordinates
+      title: BoundingBox
+      type: object
+    BulkUserRoleAssignmentsRequest:
+      properties:
+        role_assignments:
+          items:
+            $ref: '#/components/schemas/UserRoleAssignmentRequest'
+          maxItems: 100
+          title: Role Assignments
+          type: array
+      required:
+      - role_assignments
+      title: BulkUserRoleAssignmentsRequest
+      type: object
+    CoordinateSystemCategory:
+      properties:
+        items:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CoordinateSystemCategory'
+            - $ref: '#/components/schemas/CoordinateSystemEntry'
+          title: Items
+          type: array
+        title:
+          title: Title
+          type: string
+      required:
+      - title
+      - items
+      title: CoordinateSystemCategory
+      type: object
+    CoordinateSystemEntry:
+      properties:
+        title:
+          title: Title
+          type: string
+        well_known_id:
+          title: Well Known Id
+          type: string
+      required:
+      - title
+      - well_known_id
+      title: CoordinateSystemEntry
+      type: object
+    CreateWorkspaceRequest:
+      properties:
+        bounding_box:
+          anyOf:
+          - $ref: '#/components/schemas/BoundingBox'
+          - type: 'null'
+        default_coordinate_system:
+          default: ''
+          title: Default Coordinate System
+          type: string
+        description:
+          default: ''
+          title: Description
+          type: string
+        labels:
+          anyOf:
+          - items:
+              maxLength: 100
+              minLength: 1
+              type: string
+            maxItems: 20
+            type: array
+          - type: 'null'
+          description: A list of labels
+          title: Labels
+        name:
+          description: The name of the workspace, unique within an organization and
+            hub
+          maxLength: 60
+          minLength: 1
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateWorkspaceRequest
+      type: object
+    DiscoveryResponse:
+      properties:
+        discovery:
+          $ref: '#/components/schemas/DiscoveryResponseContent'
+      required:
+      - discovery
+      title: DiscoveryResponse
+      type: object
+    DiscoveryResponseContent:
+      properties:
+        hubs:
+          items:
+            $ref: '#/components/schemas/Hub'
+          title: Hubs
+          type: array
+        organizations:
+          items:
+            $ref: '#/components/schemas/Organization'
+          title: Organizations
+          type: array
+        service_access:
+          items:
+            $ref: '#/components/schemas/ServiceAccess'
+          title: Service Access
+          type: array
+        services:
+          items:
+            $ref: '#/components/schemas/Service'
+          title: Services
+          type: array
+      required:
+      - hubs
+      - organizations
+      - services
+      - service_access
+      title: DiscoveryResponseContent
+      type: object
+    ErrorInvalidParam:
+      properties:
+        name:
+          title: Name
+          type: string
+        reason:
+          title: Reason
+          type: string
+      required:
+      - name
+      - reason
+      title: ErrorInvalidParam
+      type: object
+    ErrorResponse:
+      properties:
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+        invalid-params:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ErrorInvalidParam'
+            type: array
+          - type: 'null'
+          title: Invalid-Params
+        status:
+          title: Status
+          type: integer
+        title:
+          title: Title
+          type: string
+        type:
+          title: Type
+          type: string
+      required:
+      - status
+      - title
+      - detail
+      - type
+      title: ErrorResponse
+      type: object
+    GeometryTypeEnum:
+      enum:
+      - Polygon
+      title: GeometryTypeEnum
+      type: string
+    Hub:
+      properties:
+        code:
+          title: Code
+          type: string
+        display_name:
+          title: Display Name
+          type: string
+        url:
+          title: Url
+          type: string
+      required:
+      - code
+      - display_name
+      - url
+      title: Hub
+      type: object
+    InstanceRoleWithPermissions:
+      properties:
+        description:
+          title: Description
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        permissions:
+          items:
+            type: string
+          title: Permissions
+          type: array
+      required:
+      - id
+      - name
+      - description
+      - permissions
+      title: InstanceRoleWithPermissions
+      type: object
+    LicenseAccessAuthDetails:
+      description: Auth details,retrieved from token, for v2 License Access Response
+      properties:
+        client_id:
+          title: Client Id
+          type: string
+        exp:
+          title: Exp
+          type: integer
+        iat:
+          title: Iat
+          type: integer
+        iss:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Iss
+        jti:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Jti
+        scope:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Scope
+        sid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sid
+        type:
+          title: Type
+          type: string
+        ver:
+          title: Ver
+          type: string
+      required:
+      - client_id
+      - iss
+      - exp
+      - iat
+      - sid
+      - jti
+      - ver
+      - type
+      - scope
+      title: LicenseAccessAuthDetails
+      type: object
+    LicenseAccessEntitlements:
+      description: Entitlement details for v2 License Access Response
+      properties:
+        hub_code:
+          title: Hub Code
+          type: string
+        org_id:
+          title: Org Id
+          type: string
+        org_name:
+          title: Org Name
+          type: string
+        roles:
+          items:
+            type: string
+          title: Roles
+          type: array
+        services:
+          items:
+            type: string
+          title: Services
+          type: array
+      required:
+      - org_id
+      - org_name
+      - hub_code
+      - services
+      - roles
+      title: LicenseAccessEntitlements
+      type: object
+    LicenseAccessResponseModel:
+      description: v2 License Access Response
+      properties:
+        auth_details:
+          $ref: '#/components/schemas/LicenseAccessAuthDetails'
+        entitlements:
+          $ref: '#/components/schemas/LicenseAccessEntitlements'
+        user:
+          $ref: '#/components/schemas/LicenseAccessUser'
+      required:
+      - auth_details
+      - user
+      - entitlements
+      title: LicenseAccessResponseModel
+      type: object
+    LicenseAccessUser:
+      description: User details for v2 License Access Response
+      properties:
+        org_id:
+          title: Org Id
+          type: string
+        org_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Name
+        sub:
+          title: Sub
+          type: string
+      required:
+      - org_id
+      - org_name
+      - sub
+      title: LicenseAccessUser
+      type: object
+    ListCoordinateSystemsResponse:
+      properties:
+        links:
+          additionalProperties:
+            anyOf:
+            - format: uri
+              maxLength: 2083
+              minLength: 1
+              type: string
+            - type: 'null'
+          title: Links
+          type: object
+        results:
+          items:
+            $ref: '#/components/schemas/CoordinateSystemCategory'
+          title: Results
+          type: array
+      required:
+      - links
+      - results
+      title: ListCoordinateSystemsResponse
+      type: object
+    ListInstanceRolesResponse:
+      properties:
+        roles:
+          items:
+            $ref: '#/components/schemas/InstanceRoleWithPermissions'
+          title: Roles
+          type: array
+      required:
+      - roles
+      title: ListInstanceRolesResponse
+      type: object
+    ListInstanceUsersResponse:
+      properties:
+        links:
+          $ref: '#/components/schemas/PaginationLinksWithoutTotal'
+        results:
+          items:
+            $ref: '#/components/schemas/BaseInstanceUserResponse'
+          title: Results
+          type: array
+      required:
+      - links
+      - results
+      title: ListInstanceUsersResponse
+      type: object
+    ListUserRoleResponse:
+      properties:
+        links:
+          additionalProperties:
+            anyOf:
+            - format: uri
+              maxLength: 2083
+              minLength: 1
+              type: string
+            - type: 'null'
+          title: Links
+          type: object
+        results:
+          items:
+            $ref: '#/components/schemas/User'
+          title: Results
+          type: array
+      required:
+      - links
+      - results
+      title: ListUserRoleResponse
+      type: object
+    ListUserWorkspacesResponse:
+      properties:
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+        results:
+          items:
+            $ref: '#/components/schemas/UserWorkspaceResponse'
+          title: Results
+          type: array
+      required:
+      - links
+      - results
+      title: ListUserWorkspacesResponse
+      type: object
+    ListWorkspacesResponse:
+      properties:
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+        results:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/WorkspaceRoleRequiredResponse'
+            type: array
+          - items:
+              $ref: '#/components/schemas/WorkspaceRoleOptionalResponse'
+            type: array
+          title: Results
+      required:
+      - links
+      - results
+      title: ListWorkspacesResponse
+      type: object
+    MlEnablementRequest:
+      properties:
+        ml_enablements:
+          items:
+            $ref: '#/components/schemas/WorkspaceMlEnablementRequest'
+          maxItems: 100
+          minItems: 1
+          title: Ml Enablements
+          type: array
+      required:
+      - ml_enablements
+      title: MlEnablementRequest
+      type: object
+    Organization:
+      properties:
+        display_name:
+          title: Display Name
+          type: string
+        id:
+          title: Id
+          type: string
+      required:
+      - id
+      - display_name
+      title: Organization
+      type: object
+    OrganizationSettingsFieldResponse:
+      properties:
+        ml_enabled:
+          default: false
+          title: Ml Enabled
+          type: boolean
+      title: OrganizationSettingsFieldResponse
+      type: object
+    OrganizationSettingsResponse:
+      properties:
+        created_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Created At
+        created_by:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          title: Created By
+        id:
+          format: uuid
+          title: Id
+          type: string
+        settings:
+          $ref: '#/components/schemas/OrganizationSettingsFieldResponse'
+          default:
+            ml_enabled: false
+        updated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Updated At
+        updated_by:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          title: Updated By
+      required:
+      - id
+      title: OrganizationSettingsResponse
+      type: object
+    PaginationLinks:
+      properties:
+        count:
+          title: Count
+          type: integer
+        first:
+          format: uri
+          maxLength: 2083
+          minLength: 1
+          title: First
+          type: string
+        last:
+          format: uri
+          maxLength: 2083
+          minLength: 1
+          title: Last
+          type: string
+        next:
+          anyOf:
+          - format: uri
+            maxLength: 2083
+            minLength: 1
+            type: string
+          - type: 'null'
+          title: Next
+        previous:
+          anyOf:
+          - format: uri
+            maxLength: 2083
+            minLength: 1
+            type: string
+          - type: 'null'
+          title: Previous
+        total:
+          title: Total
+          type: integer
+      required:
+      - first
+      - count
+      - last
+      - total
+      title: PaginationLinks
+      type: object
+    PaginationLinksWithoutTotal:
+      properties:
+        count:
+          title: Count
+          type: integer
+        first:
+          format: uri
+          maxLength: 2083
+          minLength: 1
+          title: First
+          type: string
+        next:
+          anyOf:
+          - format: uri
+            maxLength: 2083
+            minLength: 1
+            type: string
+          - type: 'null'
+          title: Next
+        previous:
+          anyOf:
+          - format: uri
+            maxLength: 2083
+            minLength: 1
+            type: string
+          - type: 'null'
+          title: Previous
+      required:
+      - first
+      - count
+      title: PaginationLinksWithoutTotal
+      type: object
+    RoleEnum:
+      enum:
+      - owner
+      - editor
+      - viewer
+      title: RoleEnum
+      type: string
+    Service:
+      properties:
+        code:
+          title: Code
+          type: string
+        display_name:
+          title: Display Name
+          type: string
+      required:
+      - code
+      - display_name
+      title: Service
+      type: object
+    ServiceAccess:
+      properties:
+        hub_code:
+          title: Hub Code
+          type: string
+        org_id:
+          title: Org Id
+          type: string
+        services:
+          items:
+            type: string
+          title: Services
+          type: array
+      required:
+      - hub_code
+      - org_id
+      - services
+      title: ServiceAccess
+      type: object
+    UpdateWorkspaceRequest:
+      properties:
+        bounding_box:
+          anyOf:
+          - $ref: '#/components/schemas/BoundingBox'
+          - type: 'null'
+        default_coordinate_system:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Coordinate System
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        labels:
+          anyOf:
+          - items:
+              maxLength: 100
+              minLength: 1
+              type: string
+            maxItems: 20
+            type: array
+          - type: 'null'
+          description: A list of labels
+          title: Labels
+        name:
+          anyOf:
+          - maxLength: 60
+            minLength: 1
+            type: string
+          - type: 'null'
+          title: Name
+      title: UpdateWorkspaceRequest
+      type: object
+    User:
+      properties:
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        full_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full Name
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        user_id:
+          format: uuid
+          title: User Id
+          type: string
+      required:
+      - user_id
+      - role
+      title: User
+      type: object
+    UserModel:
+      properties:
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      required:
+      - id
+      title: UserModel
+      type: object
+    UserRole:
+      properties:
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        user_id:
+          format: uuid
+          title: User Id
+          type: string
+      required:
+      - user_id
+      - role
+      title: UserRole
+      type: object
+    UserRoleAssignmentRequest:
+      properties:
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        user_id:
+          format: uuid
+          title: User Id
+          type: string
+        workspace_id:
+          format: uuid
+          title: Workspace Id
+          type: string
+      required:
+      - role
+      - user_id
+      - workspace_id
+      title: UserRoleAssignmentRequest
+      type: object
+    UserRoleMapping:
+      properties:
+        email:
+          title: Email
+          type: string
+        roles:
+          items:
+            format: uuid
+            type: string
+          title: Roles
+          type: array
+      required:
+      - email
+      - roles
+      title: UserRoleMapping
+      type: object
+    UserRoleViaEmail:
+      properties:
+        email:
+          title: Email
+          type: string
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+      required:
+      - email
+      - role
+      title: UserRoleViaEmail
+      type: object
+    UserWorkspaceResponse:
+      properties:
+        bounding_box:
+          anyOf:
+          - $ref: '#/components/schemas/BoundingBox'
+          - type: 'null'
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/UserModel'
+        default_coordinate_system:
+          default: ''
+          title: Default Coordinate System
+          type: string
+        description:
+          default: ''
+          title: Description
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        labels:
+          default: []
+          items:
+            type: string
+          title: Labels
+          type: array
+        ml_enabled:
+          default: false
+          title: Ml Enabled
+          type: boolean
+        name:
+          description: The name of the workspace, unique within an organization and
+            hub
+          maxLength: 60
+          minLength: 1
+          title: Name
+          type: string
+        self_link:
+          format: uri
+          maxLength: 2083
+          minLength: 1
+          title: Self Link
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        updated_by:
+          $ref: '#/components/schemas/UserModel'
+        user_role:
+          $ref: '#/components/schemas/RoleEnum'
+      required:
+      - id
+      - self_link
+      - name
+      - created_at
+      - created_by
+      - updated_at
+      - updated_by
+      - user_role
+      title: UserWorkspaceResponse
+      type: object
+    WorkspaceMlEnablementRequest:
+      properties:
+        ml_enabled:
+          title: Ml Enabled
+          type: boolean
+        workspace_id:
+          format: uuid
+          title: Workspace Id
+          type: string
+      required:
+      - workspace_id
+      - ml_enabled
+      title: WorkspaceMlEnablementRequest
+      type: object
+    WorkspaceRoleOptionalResponse:
+      properties:
+        bounding_box:
+          anyOf:
+          - $ref: '#/components/schemas/BoundingBox'
+          - type: 'null'
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/UserModel'
+        current_user_role:
+          anyOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          - type: 'null'
+        default_coordinate_system:
+          default: ''
+          title: Default Coordinate System
+          type: string
+        description:
+          default: ''
+          title: Description
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        labels:
+          default: []
+          items:
+            type: string
+          title: Labels
+          type: array
+        ml_enabled:
+          default: false
+          title: Ml Enabled
+          type: boolean
+        name:
+          description: The name of the workspace, unique within an organization and
+            hub
+          maxLength: 60
+          minLength: 1
+          title: Name
+          type: string
+        self_link:
+          format: uri
+          maxLength: 2083
+          minLength: 1
+          title: Self Link
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        updated_by:
+          $ref: '#/components/schemas/UserModel'
+      required:
+      - id
+      - self_link
+      - name
+      - created_at
+      - created_by
+      - updated_at
+      - updated_by
+      title: WorkspaceRoleOptionalResponse
+      type: object
+    WorkspaceRoleRequiredResponse:
+      properties:
+        bounding_box:
+          anyOf:
+          - $ref: '#/components/schemas/BoundingBox'
+          - type: 'null'
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/UserModel'
+        current_user_role:
+          $ref: '#/components/schemas/RoleEnum'
+        default_coordinate_system:
+          default: ''
+          title: Default Coordinate System
+          type: string
+        description:
+          default: ''
+          title: Description
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        labels:
+          default: []
+          items:
+            type: string
+          title: Labels
+          type: array
+        ml_enabled:
+          default: false
+          title: Ml Enabled
+          type: boolean
+        name:
+          description: The name of the workspace, unique within an organization and
+            hub
+          maxLength: 60
+          minLength: 1
+          title: Name
+          type: string
+        self_link:
+          format: uri
+          maxLength: 2083
+          minLength: 1
+          title: Self Link
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        updated_by:
+          $ref: '#/components/schemas/UserModel'
+      required:
+      - id
+      - self_link
+      - name
+      - created_at
+      - created_by
+      - updated_at
+      - updated_by
+      - current_user_role
+      title: WorkspaceRoleRequiredResponse
+      type: object
+  securitySchemes:
+    HTTPBearer:
+      scheme: bearer
+      type: http
+info:
+  description: "The Workspaces API enables users to organize, maintain, and store\
+    \ project data, but does not use or process the data. The workspace APIs allow\
+    \ you to manage: \n- Workspaces\n- User roles within workspaces\n- Workspace thumbnails\n\
+    \nThere are three pre-defined roles within workspaces: \n\n- Owner: can perform\
+    \ all actions in the workspace \n- Editor: can perform all actions excluding deleting\
+    \ of a workspace \n- Viewer: can view the workspace \n\nThese user roles can be\
+    \ assigned to users in a workspace. Once a role has been assigned it can be replaced\
+    \ or removed.\nUsers can also retrieve user roles, the role of a particular user,\
+    \ and their own role if applicable.\nFor more information on using the Workspaces\
+    \ API, see the [Workspaces API overview](https://developer.seequent.com/docs/guides/workspaces/),\
+    \ or the API references here.\n"
+  title: Workspaces API
+  version: '1.0'
+openapi: 3.1.0
+paths:
+  /workspace/admin/orgs/{org_id}/action/bulk_assign_roles:
+    post:
+      description: Assign multiple users a role in a workspace in a single request.
+        Admin endpoints allow organization admin users to access any workspace, regardless
+        of their role or lack thereof within the workspace.
+      operationId: bulk_assign_roles_admin
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkUserRoleAssignmentsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Bulk assign roles
+      tags:
+      - Admin
+  /workspace/admin/orgs/{org_id}/action/update_ml_enablement:
+    post:
+      description: Update ML (machine learning) enablement status for a group of given
+        workspaces. Admin endpoints allow organization admin users to access any workspace,
+        regardless of their role or lack thereof within the workspace.
+      operationId: update_ml_enablement_admin
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: Set to "opt-in" to enable adding user by email
+        in: header
+        name: preview-api
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to "opt-in" to enable adding user by email
+          title: Preview-Api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MlEnablementRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MlEnablementRequest'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Update ML enablements
+      tags:
+      - Admin
+  /workspace/admin/orgs/{org_id}/settings:
+    get:
+      description: Returns org settings, provided your user has access to the org.
+      operationId: get_organization_settings
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationSettingsResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Get organization settings
+      tags:
+      - Admin
+  /workspace/admin/orgs/{org_id}/users/{user_id}/workspaces:
+    get:
+      description: Returns a list of all workspaces that a specified user has a role
+        i. Admin endpoints allow organization admin users to access any workspace,
+        regardless of their role or lack thereof within the workspace..
+      operationId: list_user_workspaces_admin
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          format: uuid
+          title: User Id
+          type: string
+      - description: The maximum number of results to return. Limits over 100 are
+          deprecated and will eventually not be supported.
+        in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - minimum: 1
+            type: integer
+          - type: 'null'
+          default: 20
+          description: The maximum number of results to return. Limits over 100 are
+            deprecated and will eventually not be supported.
+          title: Limit
+      - description: The (zero-based) offset of the first item returned in the collection.
+        in: query
+        name: offset
+        required: false
+        schema:
+          anyOf:
+          - minimum: 0
+            type: integer
+          - type: 'null'
+          default: 0
+          description: The (zero-based) offset of the first item returned in the collection.
+          title: Offset
+      - deprecated: true
+        description: 'An optional comma separated list of fields to sort the results
+          by. Options are: `name`, `-name`, `created_at`, `-created_at`, `updated_at`,
+          `-updated_at`, `user_role`, `-user_role`.'
+        in: query
+        name: sort
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'An optional comma separated list of fields to sort the results
+            by. Options are: `name`, `-name`, `created_at`, `-created_at`, `updated_at`,
+            `-updated_at`, `user_role`, `-user_role`.'
+          title: Sort
+      - description: 'An optional, comma-separated list of fields by which to order
+          the results. Each field could be prefixed with an order operator: `asc:`
+          for ascending order or `desc:` for descending order, default is ascending
+          order. The sortable fields are: `name`, `created_at`, `updated_at`, and
+          `user_role`. You can also do compound sorts by comma separating your order
+          params, e.g. `asc:user_role,desc:name`. This will sort by user_role in ascending
+          order and then by name in descending order as a secondary sort.'
+        in: query
+        name: order_by
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'An optional, comma-separated list of fields by which to order
+            the results. Each field could be prefixed with an order operator: `asc:`
+            for ascending order or `desc:` for descending order, default is ascending
+            order. The sortable fields are: `name`, `created_at`, `updated_at`, and
+            `user_role`. You can also do compound sorts by comma separating your order
+            params, e.g. `asc:user_role,desc:name`. This will sort by user_role in
+            ascending order and then by name in descending order as a secondary sort.'
+          title: Order By
+      - description: Filter by workspace that a user has created, by user ID.
+        in: query
+        name: filter[created_by]
+        required: false
+        schema:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: Filter by workspace that a user has created, by user ID.
+          title: Created by filter
+      - description: Filter by the time workspace has created.
+        in: query
+        name: created_at
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by the time workspace has created.
+          title: Created at filter
+      - description: Filter by the latest time workspace was updated.
+        in: query
+        name: updated_at
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by the latest time workspace was updated.
+          title: Updated at filter
+      - deprecated: true
+        description: Filter by workspace name.
+        in: query
+        name: filter[name]
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by workspace name.
+          title: Filter[Name]
+      - description: Filter by workspace name.
+        in: query
+        name: name
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by workspace name.
+          title: Name
+      - description: Include workspaces that have been deleted.
+        in: query
+        name: deleted
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Include workspaces that have been deleted.
+          title: Deleted
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUserWorkspacesResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: List user workspaces
+      tags:
+      - Admin
+  /workspace/admin/orgs/{org_id}/workspaces:
+    get:
+      description: Get a list of all workspaces. Admin endpoints allow organization
+        admin users to access any workspace, regardless of their role or lack thereof
+        within the workspace.
+      operationId: list_workspaces_admin
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: The maximum number of results to return. Limits over 100 are
+          deprecated and will eventually not be supported.
+        in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - minimum: 1
+            type: integer
+          - type: 'null'
+          default: 20
+          description: The maximum number of results to return. Limits over 100 are
+            deprecated and will eventually not be supported.
+          title: Limit
+      - description: The (zero-based) offset of the first item returned in the collection.
+        in: query
+        name: offset
+        required: false
+        schema:
+          anyOf:
+          - minimum: 0
+            type: integer
+          - type: 'null'
+          default: 0
+          description: The (zero-based) offset of the first item returned in the collection.
+          title: Offset
+      - deprecated: true
+        description: 'An optional comma separated list of fields to sort the results
+          by. Options are: `name`, `-name`, `created_at`, `-created_at`, `updated_at`,
+          `-updated_at`, `user_role`, `-user_role`.'
+        in: query
+        name: sort
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'An optional comma separated list of fields to sort the results
+            by. Options are: `name`, `-name`, `created_at`, `-created_at`, `updated_at`,
+            `-updated_at`, `user_role`, `-user_role`.'
+          title: Sort
+      - description: 'An optional, comma-separated list of fields by which to order
+          the results. Each field could be prefixed with an order operator: `asc:`
+          for ascending order or `desc:` for descending order, default is ascending
+          order. The sortable fields are: `name`, `created_at`, `updated_at`, and
+          `user_role`. You can also do compound sorts by comma separating your order
+          params, e.g. `asc:user_role,desc:name`. This will sort by user_role in ascending
+          order and then by name in descending order as a secondary sort.'
+        in: query
+        name: order_by
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'An optional, comma-separated list of fields by which to order
+            the results. Each field could be prefixed with an order operator: `asc:`
+            for ascending order or `desc:` for descending order, default is ascending
+            order. The sortable fields are: `name`, `created_at`, `updated_at`, and
+            `user_role`. You can also do compound sorts by comma separating your order
+            params, e.g. `asc:user_role,desc:name`. This will sort by user_role in
+            ascending order and then by name in descending order as a secondary sort.'
+          title: Order By
+      - description: Filter by workspace that a user has created, by user ID.
+        in: query
+        name: filter[created_by]
+        required: false
+        schema:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: Filter by workspace that a user has created, by user ID.
+          title: Created by filter
+      - description: Filter by the time workspace has created.
+        in: query
+        name: created_at
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by the time workspace has created.
+          title: Created at filter
+      - description: Filter by the latest time workspace was updated.
+        in: query
+        name: updated_at
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by the latest time workspace was updated.
+          title: Updated at filter
+      - deprecated: true
+        description: Filter by workspace name.
+        in: query
+        name: filter[name]
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by workspace name.
+          title: Filter[Name]
+      - description: Filter by workspace name.
+        in: query
+        name: name
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by workspace name.
+          title: Name
+      - description: Include workspaces that have been deleted.
+        in: query
+        name: deleted
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Include workspaces that have been deleted.
+          title: Deleted
+      - description: Filter by workspaces that a user ID has access to.
+        in: query
+        name: filter[user_id]
+        required: false
+        schema:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: Filter by workspaces that a user ID has access to.
+          title: User ID filter
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListWorkspacesResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: List workspaces
+      tags:
+      - Admin
+  /workspace/admin/orgs/{org_id}/workspaces/{workspace_id}:
+    get:
+      description: Get a workspace by its ID. Admin endpoints allow organization admin
+        users to access any workspace, regardless of their role or lack thereof within
+        the workspace.
+      operationId: get_workspace_admin
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - description: Only list workspaces that have been deleted.
+        in: query
+        name: deleted
+        required: false
+        schema:
+          default: false
+          description: Only list workspaces that have been deleted.
+          title: Deleted Filter
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceRoleOptionalResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Get workspace
+      tags:
+      - Admin
+  /workspace/admin/orgs/{org_id}/workspaces/{workspace_id}/thumbnail:
+    get:
+      description: Returns the thumbnail image for a specified workspace. Admin endpoints
+        allow organization admin users to access any workspace, regardless of their
+        role or lack thereof within the workspace.
+      operationId: get_thumbnail_admin
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '200':
+          content:
+            image/jpeg:
+              schema:
+                format: binary
+                type: string
+            image/png:
+              schema:
+                format: binary
+                type: string
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Get thumbnail
+      tags:
+      - Admin
+  /workspace/admin/orgs/{org_id}/workspaces/{workspace_id}/users:
+    get:
+      description: List all users and their roles within a workspace. Admin endpoints
+        allow organization admin users to access any workspace, regardless of their
+        role or lack thereof within the workspace.
+      operationId: list_user_roles_admin
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: Filter to see the role of a specific user ID.
+        in: query
+        name: filter[user_id]
+        required: false
+        schema:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: Filter to see the role of a specific user ID.
+          title: User ID filter
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUserRoleResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: List users
+      tags:
+      - Admin
+    post:
+      description: Assigns a user a role in a workspace. Admin endpoints allow organization
+        admin users to access any workspace, regardless of their role or lack thereof
+        within the workspace.
+      operationId: assign_user_role_admin
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: Set to "opt-in" to enable adding user by email
+        in: header
+        name: preview-api
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to "opt-in" to enable adding user by email
+          title: Preview-Api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignRoleRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRole'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Assign user role
+      tags:
+      - Admin
+  /workspace/admin/orgs/{org_id}/workspaces/{workspace_id}/users/{user_id}:
+    delete:
+      description: Removes a user's role from a workspace. Admin endpoints allow organization
+        admin users to access any workspace, regardless of their role or lack thereof
+        within the workspace.
+      operationId: delete_user_role_admin
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          format: uuid
+          title: User Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '204':
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Remove user from workspace
+      tags:
+      - Admin
+  /workspace/evo/identity/v1/discovery:
+    get:
+      operationId: v1_discovery_workspace_evo_identity_v1_discovery_get
+      parameters:
+      - in: query
+        name: service
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Service
+      - in: header
+        name: user-agent
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User-Agent
+      - in: header
+        name: origin
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: V1 Discovery
+      tags:
+      - Discovery
+  /workspace/evo/identity/v1/token:
+    get:
+      operationId: v1_token_workspace_evo_identity_v1_token_get
+      parameters:
+      - in: query
+        name: service
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Service
+      - in: query
+        name: hub
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Hub
+      - in: query
+        name: org_id
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Org Id
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: V1 Token
+      tags:
+      - Token
+  /workspace/evo/identity/v2/discovery:
+    get:
+      operationId: v2_discovery_workspace_evo_identity_v2_discovery_get
+      parameters:
+      - in: query
+        name: service
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Service
+      - in: header
+        name: user-agent
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User-Agent
+      - in: header
+        name: origin
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: V2 Discovery
+      tags:
+      - Discovery
+  /workspace/evo/identity/v2/license-access:
+    get:
+      description: "Verify the user and token has access to the requested resources.\n\
+        \nGiven a user token, verify that the user has access to the requested\nservice,\
+        \ org and hub, as well as that the token as the required scope.\n\nOn success,\
+        \ returns details of the calling user, what they are entitled\nto, and the\
+        \ authorization the request was made with.\n\nArgs:\n    org_id (UUID): UUID\
+        \ of the Evo organisation\n    service (str): service name (i.e. \"blockmodel\"\
+        )\n    hub (str): the hub code\n    required_scope(str): scope required for\
+        \ the service\nReturns:\n    A JSON response."
+      operationId: v2_license_access_workspace_evo_identity_v2_license_access_get
+      parameters:
+      - in: query
+        name: service
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Service
+      - in: query
+        name: hub
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Hub
+      - in: query
+        name: org_id
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Id
+      - in: query
+        name: required_scope
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Required Scope
+      - in: header
+        name: tx-uuid
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tx-Uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseAccessResponseModel'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: V2 License Access
+      tags:
+      - LicenseAccess
+  /workspace/health_check:
+    get:
+      description: Checks if the service is healthy and able to response to requests
+      operationId: health_check_workspace_health_check_get
+      parameters:
+      - in: query
+        name: full
+        required: false
+        schema:
+          default: false
+          title: Full
+          type: boolean
+      - in: query
+        name: check_dependencies
+        required: false
+        schema:
+          default: false
+          title: Check Dependencies
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      summary: Health check
+      tags:
+      - General
+  /workspace/openapi.json:
+    get:
+      description: Returns the OpenAPI schema for the Workspace Service API.
+      operationId: openapi_spec
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: OpenAPI schema
+      summary: Get OpenAPI schema
+      tags:
+      - General
+  /workspace/orgs/{org_id}/coordinate_systems:
+    get:
+      description: Returns a list of coordinate systems for an organization.
+      operationId: list_coordinate_systems
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCoordinateSystemsResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: List coordinate systems
+      tags:
+      - General
+  /workspace/orgs/{org_id}/members:
+    get:
+      description: Returns a paginated list of all users with access to the Evo instance
+      operationId: list_instance_users
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: The maximum number of results to return. Limits over 100 are
+          deprecated and will eventually not be supported.
+        in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - minimum: 1
+            type: integer
+          - type: 'null'
+          default: 20
+          description: The maximum number of results to return. Limits over 100 are
+            deprecated and will eventually not be supported.
+          title: Limit
+      - description: The (zero-based) offset of the first item returned in the collection.
+        in: query
+        name: offset
+        required: false
+        schema:
+          anyOf:
+          - minimum: 0
+            type: integer
+          - type: 'null'
+          default: 0
+          description: The (zero-based) offset of the first item returned in the collection.
+          title: Offset
+      - description: Set to "opt-in" to enable adding user by email
+        in: header
+        name: preview-api
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to "opt-in" to enable adding user by email
+          title: Preview-Api
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListInstanceUsersResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: List instance users
+      tags:
+      - Workspaces
+    post:
+      description: Add user to the Evo instance
+      operationId: add_instance_users
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: Set to "opt-in" to enable adding user by email
+        in: header
+        name: preview-api
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to "opt-in" to enable adding user by email
+          title: Preview-Api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddInstanceUsersRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddInstanceUsersResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Add user to instance
+      tags:
+      - Workspaces
+  /workspace/orgs/{org_id}/members/roles:
+    get:
+      description: List all roles in the Evo instance
+      operationId: list_instance_user_roles
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: Set to "opt-in" to enable adding user by email
+        in: header
+        name: preview-api
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to "opt-in" to enable adding user by email
+          title: Preview-Api
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListInstanceRolesResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: List instance user roles
+      tags:
+      - Workspaces
+  /workspace/orgs/{org_id}/members/{user_id}:
+    delete:
+      description: Remove a user from the Evo instance
+      operationId: remove_instance_user
+      parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          title: User Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: Set to "opt-in" to enable adding user by email
+        in: header
+        name: preview-api
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to "opt-in" to enable adding user by email
+          title: Preview-Api
+      responses:
+        '204':
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Remove instance user
+      tags:
+      - Workspaces
+  /workspace/orgs/{org_id}/workspaces:
+    get:
+      description: Returns a paginated list of all workspaces that you have a role
+        to access in your organization. For a list of all workspaces regardless of
+        your user role, see the 'Admin' equivalent API.
+      operationId: list_workspaces
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: The maximum number of results to return. Limits over 100 are
+          deprecated and will eventually not be supported.
+        in: query
+        name: limit
+        required: false
+        schema:
+          anyOf:
+          - minimum: 1
+            type: integer
+          - type: 'null'
+          default: 20
+          description: The maximum number of results to return. Limits over 100 are
+            deprecated and will eventually not be supported.
+          title: Limit
+      - description: The (zero-based) offset of the first item returned in the collection.
+        in: query
+        name: offset
+        required: false
+        schema:
+          anyOf:
+          - minimum: 0
+            type: integer
+          - type: 'null'
+          default: 0
+          description: The (zero-based) offset of the first item returned in the collection.
+          title: Offset
+      - deprecated: true
+        description: 'An optional comma separated list of fields to sort the results
+          by. Options are: `name`, `-name`, `created_at`, `-created_at`, `updated_at`,
+          `-updated_at`, `user_role`, `-user_role`.'
+        in: query
+        name: sort
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'An optional comma separated list of fields to sort the results
+            by. Options are: `name`, `-name`, `created_at`, `-created_at`, `updated_at`,
+            `-updated_at`, `user_role`, `-user_role`.'
+          title: Sort
+      - description: 'An optional, comma-separated list of fields by which to order
+          the results. Each field could be prefixed with an order operator: `asc:`
+          for ascending order or `desc:` for descending order, default is ascending
+          order. The sortable fields are: `name`, `created_at`, `updated_at`, and
+          `user_role`. You can also do compound sorts by comma separating your order
+          params, e.g. `asc:user_role,desc:name`. This will sort by user_role in ascending
+          order and then by name in descending order as a secondary sort.'
+        in: query
+        name: order_by
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'An optional, comma-separated list of fields by which to order
+            the results. Each field could be prefixed with an order operator: `asc:`
+            for ascending order or `desc:` for descending order, default is ascending
+            order. The sortable fields are: `name`, `created_at`, `updated_at`, and
+            `user_role`. You can also do compound sorts by comma separating your order
+            params, e.g. `asc:user_role,desc:name`. This will sort by user_role in
+            ascending order and then by name in descending order as a secondary sort.'
+          title: Order By
+      - description: Filter by workspace that a user has created, by user ID.
+        in: query
+        name: filter[created_by]
+        required: false
+        schema:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: Filter by workspace that a user has created, by user ID.
+          title: Created by filter
+      - description: Filter by the time workspace has created.
+        in: query
+        name: created_at
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by the time workspace has created.
+          title: Created at filter
+      - description: Filter by the latest time workspace was updated.
+        in: query
+        name: updated_at
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by the latest time workspace was updated.
+          title: Updated at filter
+      - deprecated: true
+        description: Filter by workspace name.
+        in: query
+        name: filter[name]
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by workspace name.
+          title: Filter[Name]
+      - description: Filter by workspace name.
+        in: query
+        name: name
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by workspace name.
+          title: Name
+      - description: Include workspaces that have been deleted.
+        in: query
+        name: deleted
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Include workspaces that have been deleted.
+          title: Deleted
+      - description: Filter by workspaces that a user ID has access to.
+        in: query
+        name: filter[user_id]
+        required: false
+        schema:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: Filter by workspaces that a user ID has access to.
+          title: User ID filter
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListWorkspacesResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: List workspaces
+      tags:
+      - Workspaces
+    post:
+      description: Creates a new workspace in your organization.
+      operationId: create_workspace
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkspaceRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceRoleRequiredResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request conflict
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Create workspace
+      tags:
+      - Workspaces
+  /workspace/orgs/{org_id}/workspaces/{workspace_id}:
+    delete:
+      description: Deletes a workspace. Use of this API requires an "owner" role in
+        the workspace. Deleted workspaces will no longer be returned in "get workspace"
+        and "list workspace" requests, however you can include them by appending `deleted=true`
+        to your request parameters.
+      operationId: delete_workspace
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '204':
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Delete workspace
+      tags:
+      - Workspaces
+    get:
+      description: Returns a workspace by its ID, provided your user has a role to
+        access it. To retrieve a workspace by ID regardless of your user role, see
+        the 'Admin' equivalent API.
+      operationId: get_workspace
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - description: Only list workspaces that have been deleted.
+        in: query
+        name: deleted
+        required: false
+        schema:
+          default: false
+          description: Only list workspaces that have been deleted.
+          title: Deleted filter
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceRoleRequiredResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Get workspace
+      tags:
+      - Workspaces
+    patch:
+      description: Updates a workspace.
+      operationId: update_workspace
+      parameters:
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWorkspaceRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceRoleRequiredResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request conflict
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Update workspace
+      tags:
+      - Workspaces
+    post:
+      description: If a workspace has been soft deleted, this API allows you to restore
+        it again. After restoring, the workspace will no longer be included in "get
+        workspace" and "list workspace" when the `deleted=true` parameter is appended
+        to your request parameters.
+      operationId: restore_soft_deleted_workspace
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - in: query
+        name: deleted
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Deleted
+      responses:
+        '204':
+          description: Successful Response
+        '303':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Object moved -- see Method and URL list
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request syntax or unsupported method
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Restore a deleted workspace
+      tags:
+      - Workspaces
+  /workspace/orgs/{org_id}/workspaces/{workspace_id}/current-user-role:
+    get:
+      description: Returns your user account's role in a workspace.
+      operationId: get_current_user_role
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRole'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Get current user role
+      tags:
+      - Workspaces
+  /workspace/orgs/{org_id}/workspaces/{workspace_id}/thumbnail:
+    delete:
+      description: Deletes the thumbnail image for a workspace.
+      operationId: delete_workspace_thumbnail
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '204':
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Delete thumbnail for workspace
+      tags:
+      - Thumbnails
+    get:
+      description: Returns the thumbnail image for a workspace.
+      operationId: get_thumbnail
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '200':
+          content:
+            image/jpeg:
+              schema:
+                format: binary
+                type: string
+            image/png:
+              schema:
+                format: binary
+                type: string
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Get thumbnail for workspace
+      tags:
+      - Thumbnails
+    put:
+      description: Upload a new thumbnail image for a workspace.
+      operationId: put_thumbnail
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      requestBody:
+        content:
+          image/jpeg:
+            schema:
+              format: binary
+              type: string
+          image/png:
+            schema:
+              format: binary
+              type: string
+      responses:
+        '204':
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Upload thumbnail for workspace
+      tags:
+      - Thumbnails
+  /workspace/orgs/{org_id}/workspaces/{workspace_id}/users:
+    get:
+      description: Returns a list of all users with a role in a workspace.
+      operationId: list_user_roles
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: Filter to see the role of a specific user ID.
+        in: query
+        name: filter[user_id]
+        required: false
+        schema:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: Filter to see the role of a specific user ID.
+          title: User ID filter
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUserRoleResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: List users
+      tags:
+      - Workspaces
+    post:
+      description: Assigns a user a role in a workspace.
+      operationId: assign_user_role
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      - description: Set to "opt-in" to enable adding user by email
+        in: header
+        name: preview-api
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to "opt-in" to enable adding user by email
+          title: Preview-Api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignRoleRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRole'
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Assign user role
+      tags:
+      - Workspaces
+  /workspace/orgs/{org_id}/workspaces/{workspace_id}/users/{user_id}:
+    delete:
+      description: Removes a user by removing their role from the workspace.
+      operationId: delete_user_role
+      parameters:
+      - in: path
+        name: workspace_id
+        required: true
+        schema:
+          format: uuid
+          title: Workspace Id
+          type: string
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          format: uuid
+          title: User Id
+          type: string
+      - in: path
+        name: org_id
+        required: true
+        schema:
+          format: uuid
+          title: Org Id
+          type: string
+      responses:
+        '204':
+          description: Successful Response
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: No permission -- see authorization schemes
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Request forbidden -- authorization will not help
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found or user lacks access
+        '405':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Specified method is invalid for this resource
+        '410':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource is gone
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unprocessable Content
+        5XX:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unexpected error
+      security:
+      - HTTPBearer: []
+      summary: Remove user from workspace
+      tags:
+      - Workspaces
+tags:
+- description: Endpoints requiring administrative privileges
+  name: Admin
+- description: General endpoints for workspace operations
+  name: General
+- description: Endpoints for managing and maintaining workspaces in an organization
+  name: Workspaces
+- description: Endpoints for managing workspace thumbnails
+  name: Thumbnails

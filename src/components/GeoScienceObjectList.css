@@ -1,0 +1,111 @@
+.geoscience-objects-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.geoscience-objects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.geoscience-objects-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.geoscience-objects-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.geoscience-object-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.geoscience-object-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.geoscience-object-card h3 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 1.2em;
+}
+
+.geoscience-object-details {
+  margin-bottom: 15px;
+}
+
+.geoscience-object-details p {
+  margin: 8px 0;
+  color: #666;
+}
+
+.geoscience-object-details strong {
+  color: #333;
+}
+
+.bounding-box-info {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.bounding-box-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+}
+
+.bounding-box-info li {
+  font-family: monospace;
+  color: #666;
+  margin: 2px 0;
+}
+
+.download-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.download-link:hover {
+  background-color: #0056b3;
+}
+
+.geoscience-objects-loading,
+.geoscience-objects-error,
+.geoscience-objects-empty {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 
